@@ -160,6 +160,13 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $type = basename($picture['directory']);
                 if ($type == 'image' || $type == 'small_image' || $type == 'thumbnail') {
                     $data[$type] = $picture['name'];
+
+                    // Use same image for thumbnail and small image
+                    if (Mage::getStoreConfig('pimdata/image/duplicate_image')) {
+                        $data['image'] = $picture['name'];
+                        $data['small_image'] = $picture['name'];
+                        $data['thumbnail'] = $picture['name'];
+                    }
                 }
 
                 $gallery[] = $picture['name'];
