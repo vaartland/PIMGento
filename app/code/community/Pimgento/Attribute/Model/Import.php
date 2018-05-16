@@ -343,7 +343,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
             foreach ($families as $family) {
                 if (isset($groups[$family])) {
-                    $groupName = ucfirst($data['group']);
+                    $groupName = $this->getGroupName($data['group']);
 
                     $setup->addAttributeGroup('catalog_product', $groups[$family], $groupName);
                     $id = $setup->getAttributeGroupId('catalog_product', $groups[$family], $groupName);
@@ -547,5 +547,52 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
             $this->_productEntityTypeId = Mage::helper('pimgento_core')->getProductEntityTypeId();
         }
         return $this->_productEntityTypeId;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
+    private function getGroupName($id)
+    {
+        $groups = [
+            'other'                => 'Overig',
+            'erp'                  => 'ERP',
+            'seo'                  => 'SEO',
+            'adverteren'           => 'Adverteren',
+            'usp'                  => 'USP\'s',
+            'verzending'           => 'Verzending',
+            'algemeen'             => 'Algemeen',
+            'media'                => 'Media',
+            'afmetingen'           => 'Afmetingen',
+            'verlichting'          => 'Verlichting',
+            'montage'              => 'Montage',
+            'gebruiksgemak'        => 'Gebruiksgemak',
+            'geschikt'             => 'Geschikt voor',
+            'instellingen'         => 'Website instellingen',
+            'ctr'                  => 'CTR/CRO website',
+            'fysiek'               => 'Fysieke eigenschappen',
+            'functionaliteit'      => 'Functionaliteiten',
+            'technisch'            => 'Technische eigenschappen',
+            'keurmerken'           => 'Keurmerken',
+            'cd_speler'            => 'CD-speler',
+            'tuner'                => 'Tuner',
+            'connectiviteit'       => 'Connectiviteit',
+            'audio'                => 'Audio',
+            'aansluitingen_voor'   => 'Aansluitingen voorzijde',
+            'aansluitingen_achter' => 'Aansluitingen achterzijde',
+            'video'                => 'Video',
+            'aansluiting_auto'     => 'Aansluitmogelijkheid op auto',
+            'dakdragers_fit'       => 'Toepasbaar voor dakdragers',
+            'belangrijke_maten'    => 'Belangrijke afmetingen',
+            'uitbreiding'          => 'Uitbreidingsmogelijkheid',
+            'prestaties_huidig'    => 'Huidige prestaties auto',
+            'prestaties_nieuw'     => 'Extra opbrengst auto',
+            'navigatie'            => 'Navigatie eigenschappen',
+            'beeldscherm'          => 'Beeldscherm',
+        ];
+
+        return $groups[$id];
     }
 }
