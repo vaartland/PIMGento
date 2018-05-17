@@ -252,8 +252,6 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $adapter->delete($table, 'entity_id = ' . $row['entity_id']);
 
-            Mage::log(print_r($row, true));
-
             foreach ($images as $key => $image) {
 
                 $values = array(
@@ -284,7 +282,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         'store_id' => 0,
                         'label'    => null,
                         'position' => $key,
-                        'disabled' => 0
+                        'disabled' => stripos($image, 'banner_') !== false ? 1 : 0,
                     );
 
                     $adapter->insertOnDuplicate(
