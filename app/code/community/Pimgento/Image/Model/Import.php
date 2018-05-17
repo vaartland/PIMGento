@@ -24,7 +24,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->createTable(
             $this->getCode(),
-            array('code', 'image', 'small_image', 'thumbnail', 'gallery')
+            array('code', 'image', 'small_image', 'thumbnail', 'gallery', 'banner')
         );
 
         return true;
@@ -158,7 +158,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 }
                 // Allocate image to Magento attribute
                 $type = basename($picture['directory']);
-                if ($type == 'image' || $type == 'small_image' || $type == 'thumbnail') {
+                if ($type == 'image' || $type == 'small_image' || $type == 'thumbnail' || $type == 'banner') {
                     $data[$type] = $picture['name'];
 
                     // Use same image for thumbnail and small image
@@ -215,6 +215,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'image'       => 'image',
             'small_image' => 'small_image',
             'thumbnail'   => 'thumbnail',
+            'banner'      => 'banner',
         );
 
         $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, Mage::helper('pimgento_core')->getProductEntityTypeId(), 0);
@@ -250,6 +251,8 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             }
 
             $adapter->delete($table, 'entity_id = ' . $row['entity_id']);
+
+            Mage::log(print_r($row, true));
 
             foreach ($images as $key => $image) {
 
