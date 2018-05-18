@@ -232,8 +232,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $specialPrice = 'special_price';
         $msrp = 'msrp';
         $costPrice = "cost_price";
-        $kostprijs = 'kostprijs';
-        $positie = 'positie';
 
         foreach ($transformer as $attribute => $match) {
 
@@ -279,16 +277,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $costPrice . '-' . $currency,
                         $costPrice . '-' . $data['code'] . '-' . $currency,
                         $costPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
-                    ),
-                    'kostprijs' => array(
-                        $kostprijs . '-' . $currency,
-                        $kostprijs . '-' . $data['code'] . '-' . $currency,
-                        $kostprijs . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
-                    ),
-                    'positie' => array(
-                        $positie . '-' . $currency,
-                        $positie . '-' . $data['code'] . '-' . $currency,
-                        $positie . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
@@ -921,6 +909,8 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $specialPrice = 'special_price';
         $msrp = 'msrp';
         $costPrice = "cost_price";
+        $kostprijs = 'kostprijs';
+        $positie = 'positie';
 
         foreach ($transformer as $attribute => $match) {
 
@@ -985,6 +975,16 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                         $costPrice . '-' . $currency,
                         $costPrice . '-' . $data['code'] . '-' . $currency,
                         $costPrice . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
+                    ),
+                    'kostprijs' => array(
+                        $kostprijs . '-' . $currency,
+                        $kostprijs . '-' . $data['code'] . '-' . $currency,
+                        $kostprijs . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
+                    ),
+                    'positie' => array(
+                        $positie . '-' . $currency,
+                        $positie . '-' . $data['code'] . '-' . $currency,
+                        $positie . '-' . $data['lang'] . '-' . $data['code'] . '-' . $currency,
                     ),
                 );
 
