@@ -1210,30 +1210,88 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function initStock($task)
     {
-        $resource = $this->getResource();
+//        $resource = $this->getResource();
+//        $adapter  = $this->getAdapter();
+//
+//        $select = $adapter->select()
+//            ->from(
+//                $resource->getTable('catalog/product'),
+//                array(
+//                    'product_id'                => 'entity_id',
+//                    'stock_id'                  => $this->_zde(1),
+//                    'qty'                       => $this->_zde(0),
+//                    'is_in_stock'               => $this->_zde('IF(`type_id` = "configurable", 1, 0)'),
+//                    'low_stock_date'            => $this->_zde('NULL'),
+//                    'stock_status_changed_auto' => $this->_zde(0),
+//                )
+//            );
+//
+//        $insert = $adapter->insertFromSelect(
+//            $select,
+//            $resource->getTable('cataloginventory/stock_item'),
+//            array('product_id', 'stock_id', 'qty', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto'),
+//            Varien_Db_Adapter_Interface::INSERT_IGNORE
+//        );
+//
+//        $adapter->query($insert);
+
+        /*$file = $task->getFile();
+
+        if (!file_exists($file)) {
+            $message = sprintf("%s does not exist.", $file);
+            throw new Exception($message);
+        }
+
+        if (!is_readable($file)) {
+            $message = sprintf("Unable to read %s.", $file);
+            throw new Exception($message);
+        }
+
+        $file_handle = fopen($file, "r");
+
+        if ($file_handle === false) {
+            $message = sprintf("Unable to open %s.", $file);
+            throw new Exception($message);
+        }
+
+        $file_size = filesize($file);
+
+        if ($file_size == 0) {
+            fclose($file_handle);
+            return;
+        }
+
+        $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
+        $fieldsEnclosure  = Mage::getStoreConfig('pimdata/general/csv_fields_enclosure');
+
+        $row_count = 0;
+        while (($csv_line = fgetcsv($file_handle, 0, $fieldsTerminated, $fieldsEnclosure)) !== FALSE) {
+            if (++$row_count == 1) {
+                # Get column names as first row - assumes first row always has this data
+                foreach ($csv_line as $line) {
+                    $line = Mage::helper('pimgento_core')->removeUtf8Bom($line);
+                    $header[] = $line;
+                }
+                continue;
+            }
+
+            $values = array_combine($header, $csv_line);
+
+            $sku = $values['sku'];
+            $leverbaar = $values['leverbaar'];
+
+
+        }*/
+
         $adapter  = $this->getAdapter();
 
-        $select = $adapter->select()
-            ->from(
-                $resource->getTable('catalog/product'),
-                array(
-                    'product_id'                => 'entity_id',
-                    'stock_id'                  => $this->_zde(1),
-                    'qty'                       => $this->_zde(0),
-                    'is_in_stock'               => $this->_zde('IF(`type_id` = "configurable", 1, 0)'),
-                    'low_stock_date'            => $this->_zde('NULL'),
-                    'stock_status_changed_auto' => $this->_zde(0),
-                )
-            );
+        $select = $adapter->select()->from($this->getTable(), array('sku', 'leverbaar'));
 
-        $insert = $adapter->insertFromSelect(
-            $select,
-            $resource->getTable('cataloginventory/stock_item'),
-            array('product_id', 'stock_id', 'qty', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto'),
-            Varien_Db_Adapter_Interface::INSERT_IGNORE
-        );
+        $query = $adapter->query($select);
 
-        $adapter->query($insert);
+        while (($row = $query->fetch())) {
+            Mage::log(print_r($row,true));
+        }
 
         return true;
     }
