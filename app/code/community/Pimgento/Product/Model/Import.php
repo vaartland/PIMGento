@@ -1220,7 +1220,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 ],
                 [
                     'is_in_stock'               => 'leverbaar',
-                    'manage_stock'              => $this->_zde('IF(`leverbaar` = 1, 1, 0)'),
+                    'manage_stock'              => $this->_zde('IF(`leverbaar` = 1, 0, 1)'),
                     'use_config_manage_stock'   => 'leverbaar',
                     'stock_id'                  => $this->_zde(1),
                     'qty'                       => $this->_zde(0),
