@@ -1238,6 +1238,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             );
 
         $data = $adapter->fetchAssoc($select);
+        Mage::log(print_r($data,true));
 
         foreach ($data as $product) {
             $values = [
