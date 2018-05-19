@@ -1248,6 +1248,13 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 ],
                 'p.sku = c.code',
                 []
+            )
+            ->joinInner(
+                [
+                    's' => $resource->getTable('cataloginventory/stock_item')
+                ],
+                'p.entity_id = s.product_id',
+                []
             );
 
 //        $query = $adapter->query($select);
@@ -1258,17 +1265,7 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $insert = $adapter->updateFromSelect(
             $select,
-            $resource->getTable('cataloginventory/stock_item'),
-            [
-                'product_id',
-                'stock_id',
-                'qty',
-                'is_in_stock',
-                'low_stock_date',
-                'stock_status_changed_auto',
-                'manage_stock',
-                'use_config_manage_stock',
-            ]
+            $resource->getTable('cataloginventory/stock_item')
         );
 
         $adapter->query($insert);
