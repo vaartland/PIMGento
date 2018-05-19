@@ -1213,19 +1213,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
         $resource = $this->getResource();
         $adapter  = $this->getAdapter();
 
-//        $select = $adapter->select()
-//            ->from(
-//                $resource->getTable('catalog/product'),
-//                array(
-//                    'product_id'                => 'entity_id',
-//                    'stock_id'                  => $this->_zde(1),
-//                    'qty'                       => $this->_zde(0),
-//                    'is_in_stock'               => $this->_zde('IF(`type_id` = "configurable", 1, 0)'),
-//                    'low_stock_date'            => $this->_zde('NULL'),
-//                    'stock_status_changed_auto' => $this->_zde(0),
-//                )
-//            );
-
         $select = $adapter->select()
             ->from(
                 [
@@ -1248,75 +1235,38 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 ],
                 'p.sku = c.code',
                 []
-            )
-            ->joinInner(
-                [
-                    's' => $resource->getTable('cataloginventory/stock_item')
-                ],
-                'p.entity_id = s.product_id',
-                []
             );
 
-//        $query = $adapter->query($select);
-//
-//        while (($row = $query->fetch())) {
-//            Mage::log(print_r($row,true));
-//        }
+        $data = $adapter->fetchAssoc($select);
 
-        $insert = $adapter->updateFromSelect(
-            $select,
-            $resource->getTable('cataloginventory/stock_item')
-        );
+        foreach ($data as $product) {
+            $values = [
+                'is_in_stock' => $product['is_in_stock'],
+                'manage_stock' => $product['manage_stock'],
+                'use_config_manage_stock' => $product['use_config_manage_stock'],
+                'stock_id' => $product['stock_id'],
+                'qty' => $product['qty'],
+                'low_stock_date' => $product['low_stock_date'],
+                'stock_status_changed_auto' => $product['stock_status_changed_auto'],
+                'product_id' => $product['product_id'],
+            ];
 
-        $adapter->query($insert);
+            $update = $adapter->update(
+                $resource->getTable('cataloginventory/stock_item'),
+                $values,
+                'product_id = ' . $product['product_id']
+            );
 
-        /*$file = $task->getFile();
+            Mage::log($update);
 
-        if (!file_exists($file)) {
-            $message = sprintf("%s does not exist.", $file);
-            throw new Exception($message);
-        }
-
-        if (!is_readable($file)) {
-            $message = sprintf("Unable to read %s.", $file);
-            throw new Exception($message);
-        }
-
-        $file_handle = fopen($file, "r");
-
-        if ($file_handle === false) {
-            $message = sprintf("Unable to open %s.", $file);
-            throw new Exception($message);
-        }
-
-        $file_size = filesize($file);
-
-        if ($file_size == 0) {
-            fclose($file_handle);
-            return;
-        }
-
-        $fieldsTerminated = Mage::getStoreConfig('pimdata/general/csv_fields_terminated');
-        $fieldsEnclosure  = Mage::getStoreConfig('pimdata/general/csv_fields_enclosure');
-
-        $row_count = 0;
-        while (($csv_line = fgetcsv($file_handle, 0, $fieldsTerminated, $fieldsEnclosure)) !== FALSE) {
-            if (++$row_count == 1) {
-                # Get column names as first row - assumes first row always has this data
-                foreach ($csv_line as $line) {
-                    $line = Mage::helper('pimgento_core')->removeUtf8Bom($line);
-                    $header[] = $line;
-                }
-                continue;
+            if ($update === 0) {
+                $adapter->insert(
+                    $resource->getTable('cataloginventory/stock_item'),
+                    $values
+                );
             }
 
-            $values = array_combine($header, $csv_line);
-
-            $sku = $values['sku'];
-            $leverbaar = $values['leverbaar'];
-
-
-        }*/
+        }
 
         return true;
     }
