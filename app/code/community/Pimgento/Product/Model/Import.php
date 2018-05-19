@@ -1250,23 +1250,29 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 []
             );
 
-        $insert = $adapter->insertFromSelect(
-            $select,
-            $resource->getTable('cataloginventory/stock_item'),
-            [
-                'product_id',
-                'stock_id',
-                'qty',
-                'is_in_stock',
-                'low_stock_date',
-                'stock_status_changed_auto',
-                'manage_stock',
-                'use_config_manage_stock',
-            ],
-            Varien_Db_Adapter_Interface::INSERT_IGNORE
-        );
+        $query = $adapter->query($select);
 
-        $adapter->query($insert);
+        while (($row = $query->fetch())) {
+            Mage::log(print_r($row,true));
+        }
+
+//        $insert = $adapter->insertFromSelect(
+//            $select,
+//            $resource->getTable('cataloginventory/stock_item'),
+//            [
+//                'product_id',
+//                'stock_id',
+//                'qty',
+//                'is_in_stock',
+//                'low_stock_date',
+//                'stock_status_changed_auto',
+//                'manage_stock',
+//                'use_config_manage_stock',
+//            ],
+//            Varien_Db_Adapter_Interface::INSERT_IGNORE
+//        );
+//
+//        $adapter->query($insert);
 
         /*$file = $task->getFile();
 
