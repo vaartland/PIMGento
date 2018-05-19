@@ -1210,9 +1210,9 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function initStock($task)
     {
-//        $resource = $this->getResource();
-//        $adapter  = $this->getAdapter();
-//
+        $resource = $this->getResource();
+        $adapter  = $this->getAdapter();
+
 //        $select = $adapter->select()
 //            ->from(
 //                $resource->getTable('catalog/product'),
@@ -1225,15 +1225,48 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 //                    'stock_status_changed_auto' => $this->_zde(0),
 //                )
 //            );
-//
-//        $insert = $adapter->insertFromSelect(
-//            $select,
-//            $resource->getTable('cataloginventory/stock_item'),
-//            array('product_id', 'stock_id', 'qty', 'is_in_stock', 'low_stock_date', 'stock_status_changed_auto'),
-//            Varien_Db_Adapter_Interface::INSERT_IGNORE
-//        );
-//
-//        $adapter->query($insert);
+
+        $select = $adapter->select()
+            ->from(
+                [
+                    'p' => $this->getTable()
+                ],
+                [
+                    'is_in_stock'               => 'leverbaar',
+                    'manage_stock'              => $this->_zde('IF(`leverbaar` = 1, 1, 0)'),
+                    'use_config_manage_stock'   => 'leverbaar',
+                    'stock_id'                  => $this->_zde(1),
+                    'qty'                       => $this->_zde(0),
+                    'low_stock_date'            => $this->_zde('NULL'),
+                    'stock_status_changed_auto' => $this->_zde(0),
+                    'product_id'                => 'entity_id',
+                ]
+            )
+            ->joinInner(
+                [
+                    'c' => $resource->getTable('pimgento_core/code')
+                ],
+                'p.sku = c.code',
+                []
+            );
+
+        $insert = $adapter->insertFromSelect(
+            $select,
+            $resource->getTable('cataloginventory/stock_item'),
+            [
+                'product_id',
+                'stock_id',
+                'qty',
+                'is_in_stock',
+                'low_stock_date',
+                'stock_status_changed_auto',
+                'manage_stock',
+                'use_config_manage_stock',
+            ],
+            Varien_Db_Adapter_Interface::INSERT_IGNORE
+        );
+
+        $adapter->query($insert);
 
         /*$file = $task->getFile();
 
@@ -1282,16 +1315,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
 
         }*/
-
-        $adapter  = $this->getAdapter();
-
-        $select = $adapter->select()->from($this->getTable(), array('sku', 'leverbaar'));
-
-        $query = $adapter->query($select);
-
-        while (($row = $query->fetch())) {
-            Mage::log(print_r($row,true));
-        }
 
         return true;
     }
