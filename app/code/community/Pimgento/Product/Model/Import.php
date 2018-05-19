@@ -1237,37 +1237,41 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 []
             );
 
-        $data = $adapter->fetchAssoc($select);
-        Mage::log(print_r($data,true));
+        $query = $adapter->query($select);
 
-        foreach ($data as $product) {
-            $values = [
-                'is_in_stock' => $product['is_in_stock'],
-                'manage_stock' => $product['manage_stock'],
-                'use_config_manage_stock' => $product['use_config_manage_stock'],
-                'stock_id' => $product['stock_id'],
-                'qty' => $product['qty'],
-                'low_stock_date' => $product['low_stock_date'],
-                'stock_status_changed_auto' => $product['stock_status_changed_auto'],
-                'product_id' => $product['product_id'],
-            ];
-
-            $update = $adapter->update(
-                $resource->getTable('cataloginventory/stock_item'),
-                $values,
-                'product_id = ' . $product['product_id']
-            );
-
-            Mage::log($update);
-
-            if ($update === 0) {
-                $adapter->insert(
-                    $resource->getTable('cataloginventory/stock_item'),
-                    $values
-                );
-            }
-
+        while (($row = $query->fetch())) {
+            Mage::log(print_r($row,true));
         }
+
+//
+//        foreach ($data as $product) {
+//            $values = [
+//                'is_in_stock' => $product['is_in_stock'],
+//                'manage_stock' => $product['manage_stock'],
+//                'use_config_manage_stock' => $product['use_config_manage_stock'],
+//                'stock_id' => $product['stock_id'],
+//                'qty' => $product['qty'],
+//                'low_stock_date' => $product['low_stock_date'],
+//                'stock_status_changed_auto' => $product['stock_status_changed_auto'],
+//                'product_id' => $product['product_id'],
+//            ];
+//
+//            $update = $adapter->update(
+//                $resource->getTable('cataloginventory/stock_item'),
+//                $values,
+//                'product_id = ' . $product['product_id']
+//            );
+//
+//            Mage::log($update);
+//
+//            if ($update === 0) {
+//                $adapter->insert(
+//                    $resource->getTable('cataloginventory/stock_item'),
+//                    $values
+//                );
+//            }
+//
+//        }
 
         return true;
     }
