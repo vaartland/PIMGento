@@ -39,46 +39,46 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function detectConfigurable($task)
     {
-        $resource = $this->getResource();
-        $adapter  = $this->getAdapter();
-
-        /* @var $helper Pimgento_Image_Helper_Data */
-        $helper = Mage::helper('pimgento_image');
-
-        $directory = $helper->getImageDir();
-
-        $images = $helper->getFiles($directory);
-
-        foreach ($images as $sku => $pictures) {
-
-            $parents = $adapter->fetchCol(
-                $adapter->select()
-                    ->from(
-                        array(
-                            's' => $resource->getTable('catalog/product_super_link')
-                        ),
-                        array()
-                    )
-                    ->joinInner(
-                        array('e2' => $resource->getTable('catalog/product')),
-                        's.product_id = e2.entity_id AND e2.sku = "' . $sku . '"',
-                        array()
-                    )
-                    ->joinInner(
-                        array('e1' => $resource->getTable('catalog/product')),
-                        's.parent_id = e1.entity_id',
-                        array(
-                            'e1.sku',
-                        )
-                    )
-            );
-
-            if (count($parents)) {
-                foreach ($parents as $parent) {
-                    $helper->copyFolder($directory . DS . $sku, $directory . DS . $parent);
-                }
-            }
-        }
+//        $resource = $this->getResource();
+//        $adapter  = $this->getAdapter();
+//
+//        /* @var $helper Pimgento_Image_Helper_Data */
+//        $helper = Mage::helper('pimgento_image');
+//
+//        $directory = $helper->getImageDir();
+//
+//        $images = $helper->getFiles($directory);
+//
+//        foreach ($images as $sku => $pictures) {
+//
+//            $parents = $adapter->fetchCol(
+//                $adapter->select()
+//                    ->from(
+//                        array(
+//                            's' => $resource->getTable('catalog/product_super_link')
+//                        ),
+//                        array()
+//                    )
+//                    ->joinInner(
+//                        array('e2' => $resource->getTable('catalog/product')),
+//                        's.product_id = e2.entity_id AND e2.sku = "' . $sku . '"',
+//                        array()
+//                    )
+//                    ->joinInner(
+//                        array('e1' => $resource->getTable('catalog/product')),
+//                        's.parent_id = e1.entity_id',
+//                        array(
+//                            'e1.sku',
+//                        )
+//                    )
+//            );
+//
+//            if (count($parents)) {
+//                foreach ($parents as $parent) {
+//                    $helper->copyFolder($directory . DS . $sku, $directory . DS . $parent);
+//                }
+//            }
+//        }
 
         return true;
     }
