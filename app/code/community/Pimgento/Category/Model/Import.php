@@ -296,96 +296,96 @@ class Pimgento_Category_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function updateUrl($task)
     {
-        $resource = $this->getResource();
-        $adapter  = $this->getAdapter();
-
-        $attribute = $resource->getAttribute('url_key', $this->getCategoryEntityTypeId());
-
-        /* @var $url Mage_Catalog_Model_Product_Url */
-        $url = Mage::getModel('catalog/product_url');
-
-        /* @var $helper Pimgento_Core_Helper_Data */
-        $helper = Mage::helper('pimgento_core');
-
-        $stores = $helper->getStoresLang();
-
-        foreach ($stores as $local => $ids) {
-
-            if ($this->getRequest()->columnExists($this->getTable(), 'label-' . $local)) {
-
-                foreach ($ids as $storeId) {
-
-                    $select = $adapter->select()
-                        ->from($this->getTable(), array('name' => 'label-' . $local, 'entity_id'));
-
-                    $query = $adapter->query($select);
-
-                    while (($row = $query->fetch())) {
-
-                        $new = $url->formatUrlKey($row['name']);
-
-                        $values = array(
-                            'entity_type_id' => $this->_zde($this->getCategoryEntityTypeId()),
-                            'attribute_id'   => $this->_zde($attribute['attribute_id']),
-                            'store_id'       => $this->_zde($storeId),
-                            'entity_id'      => $row['entity_id'],
-                            'value'          => $new
-                        );
-
-                        $table = $resource->getValueTable('catalog/category', $attribute['backend_type']);
-
-                        $current = false;
-
-                        if ($this->isEnterprise()) {
-                            $table = $resource->getValueTable('catalog/category', 'url_key');
-
-                            $current = $adapter->fetchOne(
-                                $adapter->select()
-                                    ->from($table, array('value'))
-                                    ->where('entity_id = ?', $row['entity_id'])
-                                    ->where('attribute_id = ?', $attribute['attribute_id'])
-                                    ->where('store_id = ?', $this->_zde($storeId))
-                                    ->limit(1)
-                            );
-                        }
-
-                        if ($this->getConfig('update_url')) {
-
-                            $adapter->insertOnDuplicate($table, $values);
-
-                            if ($this->isEnterprise()) {
-                                if ($current) {
-                                    if ($current != $new) {
-                                        /* @var $factory Mage_Core_Model_Factory */
-                                        $factory = Mage::getSingleton('core/factory');
-
-                                        /* @var $redirect Enterprise_Catalog_Model_Category_Redirect */
-                                        $redirect = $factory->getModel('enterprise_catalog/category_redirect');
-
-                                        /* @var $category Mage_Catalog_Model_Category */
-                                        $category = Mage::getModel('catalog/category');
-                                        $category->setId($row['entity_id']);
-
-                                        $adapter->dropTemporaryTable(
-                                            Enterprise_Catalog_Model_Category_Redirect::TMP_TABLE_NAME
-                                        );
-
-                                        $redirect->saveCustomRedirects($category, $storeId);
-                                    }
-                                }
-                            }
-
-                        } else {
-                            $adapter->insertIgnore($table, $values);
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
+//        $resource = $this->getResource();
+//        $adapter  = $this->getAdapter();
+//
+//        $attribute = $resource->getAttribute('url_key', $this->getCategoryEntityTypeId());
+//
+//        /* @var $url Mage_Catalog_Model_Product_Url */
+//        $url = Mage::getModel('catalog/product_url');
+//
+//        /* @var $helper Pimgento_Core_Helper_Data */
+//        $helper = Mage::helper('pimgento_core');
+//
+//        $stores = $helper->getStoresLang();
+//
+//        foreach ($stores as $local => $ids) {
+//
+//            if ($this->getRequest()->columnExists($this->getTable(), 'label-' . $local)) {
+//
+//                foreach ($ids as $storeId) {
+//
+//                    $select = $adapter->select()
+//                        ->from($this->getTable(), array('name' => 'label-' . $local, 'entity_id'));
+//
+//                    $query = $adapter->query($select);
+//
+//                    while (($row = $query->fetch())) {
+//
+//                        $new = $url->formatUrlKey($row['name']);
+//
+//                        $values = array(
+//                            'entity_type_id' => $this->_zde($this->getCategoryEntityTypeId()),
+//                            'attribute_id'   => $this->_zde($attribute['attribute_id']),
+//                            'store_id'       => $this->_zde($storeId),
+//                            'entity_id'      => $row['entity_id'],
+//                            'value'          => $new
+//                        );
+//
+//                        $table = $resource->getValueTable('catalog/category', $attribute['backend_type']);
+//
+//                        $current = false;
+//
+//                        if ($this->isEnterprise()) {
+//                            $table = $resource->getValueTable('catalog/category', 'url_key');
+//
+//                            $current = $adapter->fetchOne(
+//                                $adapter->select()
+//                                    ->from($table, array('value'))
+//                                    ->where('entity_id = ?', $row['entity_id'])
+//                                    ->where('attribute_id = ?', $attribute['attribute_id'])
+//                                    ->where('store_id = ?', $this->_zde($storeId))
+//                                    ->limit(1)
+//                            );
+//                        }
+//
+//                        if ($this->getConfig('update_url')) {
+//
+//                            $adapter->insertOnDuplicate($table, $values);
+//
+//                            if ($this->isEnterprise()) {
+//                                if ($current) {
+//                                    if ($current != $new) {
+//                                        /* @var $factory Mage_Core_Model_Factory */
+//                                        $factory = Mage::getSingleton('core/factory');
+//
+//                                        /* @var $redirect Enterprise_Catalog_Model_Category_Redirect */
+//                                        $redirect = $factory->getModel('enterprise_catalog/category_redirect');
+//
+//                                        /* @var $category Mage_Catalog_Model_Category */
+//                                        $category = Mage::getModel('catalog/category');
+//                                        $category->setId($row['entity_id']);
+//
+//                                        $adapter->dropTemporaryTable(
+//                                            Enterprise_Catalog_Model_Category_Redirect::TMP_TABLE_NAME
+//                                        );
+//
+//                                        $redirect->saveCustomRedirects($category, $storeId);
+//                                    }
+//                                }
+//                            }
+//
+//                        } else {
+//                            $adapter->insertIgnore($table, $values);
+//                        }
+//
+//                    }
+//
+//                }
+//
+//            }
+//
+//        }
 
         return true;
     }
