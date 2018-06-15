@@ -339,7 +339,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             $columnValues = [];
             foreach ($csv_line as $key => $value) {
                 if (stripos($columnNames[$key], '-unit') !== false) {
-                    $columnValues[substr($columnNames[$key], 0, strlen($columnNames[$key]) -5)] .= ' ' . $this->matchUnit($value);
+                    $columnValues[substr($columnNames[$key], 0, strlen($columnNames[$key]) -5)] .= $this->matchUnit($value);
                 }
                 $columnValues[$columnNames[$key]] = $value;
 
@@ -497,14 +497,14 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
     private function matchUnit($value)
     {
         $array = [
-            'MILLIMETER' => 'mm',
-            'CENTIMETER' => 'cm',
-            'DECIMETER' => 'dm',
-            'METER' => 'm',
-            'MILLIGRAM' => 'mg',
-            'GRAM' => 'g',
-            'KILOGRAM' => 'kg',
-            'LITER' => 'l',
+            'MILLIMETER' => ' mm',
+            'CENTIMETER' => ' cm',
+            'DECIMETER' => ' dm',
+            'METER' => ' m',
+            'MILLIGRAM' => ' mg',
+            'GRAM' => ' g',
+            'KILOGRAM' => ' kg',
+            'LITER' => ' l',
         ];
 
         return $array[$value];
