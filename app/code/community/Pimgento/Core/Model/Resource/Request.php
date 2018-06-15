@@ -339,7 +339,15 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             $columnValues = [];
             foreach ($csv_line as $key => $value) {
                 if (stripos($columnNames[$key], '-unit') !== false) {
-                    $columnValues[substr($columnNames[$key], 0, strlen($columnNames[$key]) -5)] .= $this->matchUnit($value);
+                    $keyName = substr($columnNames[$key], 0, strlen($columnNames[$key]) -5);
+
+                    if (stripos($columnValues[$keyName], '.0000')) {
+                        $columnValues[$keyName] = (int)$columnValues[$keyName];
+                    } else {
+                        $columnValues[$keyName] = (float)$columnValues[$keyName];
+                    }
+
+                    $columnValues[$keyName] .= $this->matchUnit($value);
                 }
                 $columnValues[$columnNames[$key]] = $value;
 
