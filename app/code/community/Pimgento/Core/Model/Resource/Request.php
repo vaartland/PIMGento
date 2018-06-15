@@ -343,7 +343,7 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
 
                     if (stripos($columnValues[$keyName], '.0000')) {
                         $columnValues[$keyName] = (int)$columnValues[$keyName];
-                    } else {
+                    } elseif ($columnValues[$keyName] != '') {
                         $columnValues[$keyName] = (float)$columnValues[$keyName];
                     }
 
