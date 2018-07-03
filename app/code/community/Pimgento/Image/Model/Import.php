@@ -24,7 +24,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
     {
         $this->getRequest()->createTable(
             $this->getCode(),
-            array('code', 'image', 'small_image', 'thumbnail', 'gallery', 'banner')
+            array('code', 'image', 'small_image', 'thumbnail', 'gallery', 'banner', 'handleiding')
         );
 
         return true;
@@ -122,9 +122,9 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             $exists = $adapter->fetchOne(
                 $adapter->select()
-                    ->from($resource->getTable('catalog/product'), array($this->_zde(1)))
-                    ->where('sku = ?', $sku)
-                    ->limit(1)
+                        ->from($resource->getTable('catalog/product'), array($this->_zde(1)))
+                        ->where('sku = ?', $sku)
+                        ->limit(1)
             );
 
             if (!$exists) {
@@ -138,11 +138,19 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
             foreach ($pictures as $picture) {
 
+                $type = basename($picture['directory']);
+
                 $ioAdapter->open(
                     array(
                         'path' => dirname($destination . $picture['name'])
                     )
                 );
+
+                if ($type == 'handleiding') {
+                    $ioAdapter->mv($picture['directory'] . $picture['file'], $destination . $picture['name']);
+                    $data['handleiding'] = $picture['name'];
+                    continue;
+                }
 
                 if (Mage::getStoreConfig('pimdata/image/delete')) {
                     $ioAdapter->mv($picture['directory'] . $picture['file'], $destination . $picture['name']);
@@ -157,7 +165,6 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     $data['thumbnail'] = $picture['name'];
                 }
                 // Allocate image to Magento attribute
-                $type = basename($picture['directory']);
                 if ($type == 'image' || $type == 'small_image' || $type == 'thumbnail' || $type == 'banner') {
                     $data[$type] = $picture['name'];
 
@@ -216,6 +223,7 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'small_image' => 'small_image',
             'thumbnail'   => 'thumbnail',
             'banner'      => 'banner',
+            'handleiding' => 'handleiding',
         );
 
         $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, Mage::helper('pimgento_core')->getProductEntityTypeId(), 0);
@@ -268,11 +276,11 @@ class Pimgento_Image_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 if (!$valueId) {
                     $valueId = $adapter->fetchOne(
                         $adapter->select()
-                            ->from($table, array('value_id'))
-                            ->where('attribute_id = ?', $attributeId)
-                            ->where('entity_id = ?', $row['entity_id'])
-                            ->where('value = ?', $image)
-                            ->limit(1)
+                                ->from($table, array('value_id'))
+                                ->where('attribute_id = ?', $attributeId)
+                                ->where('entity_id = ?', $row['entity_id'])
+                                ->where('value = ?', $image)
+                                ->limit(1)
                     );
                 }
 
