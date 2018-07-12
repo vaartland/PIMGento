@@ -107,8 +107,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $adapter->addColumn($this->getTable(), '_tax_class_id', 'INT(11) NOT NULL default "' . $defaultTax . '"');
 
-        $adapter->addColumn($this->getTable(), 'weight', 'INT(11) NOT NULL default 20');
-
         return true;
     }
 
@@ -600,10 +598,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'is_recurring'          => $this->_zde(0),
             'visibility'            => $this->_zde(4),
             'weight'                => $this->_zde(
-                'IF(`verzendkosten` = "0.00", 20,
-                IF(`verzendkosten` = "12.50", 1,
-                IF(`verzendkosten` = "30.00", 100,
-                IF(`verzendkosten` = "6.95", 0, 20))))'),
+                'IF(`verzendkosten` = "0", 20,
+                IF(`verzendkosten` = "1", 1,
+                IF(`verzendkosten` = "2", 100,
+                IF(`verzendkosten` = "3", 0, 20))))'),
         );
 
         if ($this->getConfig('configurable_enabled')) {
