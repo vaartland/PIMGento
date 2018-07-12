@@ -600,10 +600,10 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'is_recurring'          => $this->_zde(0),
             'visibility'            => $this->_zde(4),
             'weight'                => $this->_zde(
-                'IF(`verzendkosten` = 0, 20,
-                IF(`verzendkosten` = 1, 1,
-                IF(`verzendkosten` = 2, 100,
-                IF(`verzendkosten` = 3, 0, 0))))'),
+                'IF(`verzendkosten` = "0", 20,
+                IF(`verzendkosten` = "1", 1,
+                IF(`verzendkosten` = "2", 100,
+                IF(`verzendkosten` = "3", 0, 20))))'),
         );
 
         if ($this->getConfig('configurable_enabled')) {
