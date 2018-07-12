@@ -588,12 +588,6 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
 
         $values = array(
             'tax_class_id' => '_tax_class_id',
-            'weight'       => $this->_zde(
-                'IF(`verzendkosten` = "1", 1,
-                IF(`verzendkosten` = "2", 100,
-                IF(`verzendkosten` = "3", 0,
-                IF(`verzendkosten` = "0", 20, 0))))'
-            ),
         );
 
         $this->getRequest()->setValues($this->getCode(), 'catalog/product', $values, $this->getProductEntityTypeId(), 0, 2);
@@ -603,6 +597,12 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
             'enable_googlecheckout' => $this->_zde(0),
             'is_recurring'          => $this->_zde(0),
             'visibility'            => $this->_zde(4),
+            'weight'       => $this->_zde(
+                'IF(`verzendkosten` = "1", 1,
+                IF(`verzendkosten` = "2", 100,
+                IF(`verzendkosten` = "3", 0,
+                IF(`verzendkosten` = "0", 20, 0))))'
+            ),
         );
 
         if ($this->getConfig('configurable_enabled')) {
