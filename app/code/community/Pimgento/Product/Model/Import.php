@@ -706,8 +706,9 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $values['weight'] = $this->_zde(
                     'IF(`verzendkosten` = 74064, 1,
                     IF(`verzendkosten` = 74065, 100,
+                    IF(`verzendkosten` = 74184, 10,
                     IF(`verzendkosten` = 74066, 0,
-                    IF(`verzendkosten` = 74063, 20, 0))))'
+                    IF(`verzendkosten` = 74063, 20, 0)))))'
                 );
 
                 $this->getRequest()->setValues(
