@@ -514,8 +514,11 @@ class Pimgento_Core_Model_Resource_Request extends Mage_Core_Model_Resource_Db_A
             'KILOGRAM' => ' kg',
             'LITER' => ' l',
         ];
+        if (isset($array[$value])) {
+            return $array[$value];
+        }
 
-        return $array[$value];
+        return '';
     }
 
 }
