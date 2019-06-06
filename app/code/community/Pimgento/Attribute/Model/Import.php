@@ -571,7 +571,7 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
             'gebruiksgemak'        => 'Gebruiksgemak',
             'geschikt'             => 'Geschikt voor',
             'instellingen'         => 'Website instellingen',
-            'ctr'                  => 'CTR/CRO website',
+            'ctr'                  => 'CTR CRO website',
             'fysiek'               => 'Fysieke eigenschappen',
             'functionaliteit'      => 'Functionaliteiten',
             'technisch'            => 'Technische eigenschappen',
